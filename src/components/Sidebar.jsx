@@ -36,10 +36,10 @@ function Sidebar() {
       <i class='bx bxs-user-circle'></i>
         Tài khoản
       </Link>
-      <a href="form.html" className="nav-item nav-link">
+      <Link to={"/education"} className="nav-item nav-link">
         <i className="fa fa-keyboard me-2" />
-        Forms
-      </a>
+        Loại hình giáo dục
+      </Link>
       <a href="table.html" className="nav-item nav-link">
         <i className="fa fa-table me-2" />
         Tables

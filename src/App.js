@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Users from "./pages/Users";
 import UserRoles from "./pages/UserRoles";
+import Education from "./pages/Education";
 
 function App() {
   return (
@@ -9,6 +10,8 @@ function App() {
       <Routes>
         <Route path="/userroles" element={<UserRoles/>}/>
         <Route path="/users" element={<Users/>}/>
+        <Route path="/education" element={<Education/>}/>
+
       </Routes>
       </BrowserRouter>
     </div>

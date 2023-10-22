@@ -1,0 +1,46 @@
+.ql-editor {
+  box-sizing: border-box;
+  line-height: 1.42;
+  height: 100%;
+  outline: none;
+  overflow-y: auto;
+  padding: 12px 15px;
+  tab-size: 4;
+  -moz-tab-size: 4;
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  min-height: 200px;
+}
+
+.row > * {
+  flex-shrink: 0;
+  width: 101%;
+  max-width: 110%;
+  padding-right: calc(var(--bs-gutter-x) * 0.5);
+  padding-left: calc(var(--bs-gutter-x) * 0.5);
+  margin-top: var(--bs-gutter-y);
+}
+.imgRow {
+  width: 80% !important;
+  display: flex;
+  height: 130px;
+}
+.imgcol > .renderImage {
+  width: auto;
+  height: 130px;
+}
+
+/*# sourceMappingURL=app.css.map*/
+.courseRow{
+  width: 100%;
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
+  justify-content: space-around;
+}
+.card-text{
+  min-height: 70px;
+}
+h5{
+  font-size: 17px !important;
+}

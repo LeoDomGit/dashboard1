@@ -19,6 +19,7 @@ function Users() {
   const [usernameedit, setUsernameedit] = useState("");
   const [emailedit, setUseremailedit] = useState("");
   const handleClose2 = () => setShow2(false);
+  const [show3, setShow3] = useState(false);
   const [idRoleedit, setidRoleedit] = useState(0);
   //==================================
   const checkEmail = (e) => {
@@ -93,39 +94,48 @@ function Users() {
   //   =========================================
   const deleteUser = (id) => {
     Swal.fire({
-        icon:'question',
-        text: "Bạn muốn xoá tài khoản này ?",
-        showDenyButton: true,
-        showCancelButton: false,
-        confirmButtonText: "Đúng",
-        denyButtonText: `Không`,
+      icon: "question",
+      text: "Bạn muốn xoá tài khoản này ?",
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: "Đúng",
+      denyButtonText: `Không`,
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        fetch(url+'deleteUser?id='+id).then(res=>res.json()).then((res)=>{
-            if(res.check==true){
+        fetch(url + "deleteUser?id=" + id)
+          .then((res) => res.json())
+          .then((res) => {
+            if (res.check == true) {
+              Toast.fire({
+                icon: "success",
+                title: "Đã xoá tài khoản",
+              });
+              setUsers(res.users);
+            } else if (res.check == false) {
+              if (res.msg.id) {
                 Toast.fire({
-                    icon: 'success',
-                    title: 'Đã xoá tài khoản'
-                  })
-                  setUsers(res.users);
-            }else if(res.check==false){
-                if(res.msg.id){
-                    Toast.fire({
-                        icon: 'error',
-                        title: res.msg.id
-                      })
-                }else if(res.msg){
-                    Toast.fire({
-                        icon: 'error',
-                        title: res.msg
-                      })   
-                }
+                  icon: "error",
+                  title: res.msg.id,
+                });
+              } else if (res.msg) {
+                Toast.fire({
+                  icon: "error",
+                  title: res.msg,
+                });
+              }
             }
-        })
+          });
       } else if (result.isDenied) {
       }
     });
+  };
+  const setSideBar1 = () => {
+    if (show3 == false) {
+      setShow3(true);
+    } else {
+      setShow3(false);
+    }
   };
   // =========================================
   const Toast = Swal.mixin({
@@ -238,15 +248,27 @@ function Users() {
   }, []);
   return (
     <>
-      <Sidebar />
-      <div classname="content">
-        {loading && <Loader />}
-        <nav className="navbar navbar-expand sticky-top px-4 py-0 mt-3">
+      <Sidebar show={show3} />
+      {loading && <Loader />}
+      <div className={`content ${show3 ? "" : "open"} mt-3`}>
+        {/* Navbar Start */}
+        <nav style={{'paddingLeft':show3?'27%':'2%','transition':'ease-in-out .3s'}} className="navbar navbar-expand sticky-top px-4 py-0">
+          <button
+            className="btn btn-success me-3"
+            onClick={(e) => setSideBar1()}
+          >
+            <i class="bx bx-menu"></i>
+          </button>
           <button className="btn btn-primary" onClick={(e) => setShow(true)}>
             Thêm
           </button>
         </nav>
-        {/* ==========================Modal Tài khoản================================= */}
+        {/* Navbar End */}
+        {/* Sale & Revenue Start */}
+        <div className="container-fluid pt-4 px-4">
+          <div className="row g-4">
+            {/* ==========================Modal Tài khoản================================= */}
+        <div className="container-fluid">
         <Modal show={show} onHide={handleClose}>
           <Modal.Header>
             <Modal.Title>Tài khoản Modal</Modal.Title>
@@ -353,7 +375,7 @@ function Users() {
         </Modal>
         <div className="row mt-3">
           {users && users.length > 0 && (
-            <div className="col-md">
+            <div className={`col-md`} >
               <div className="table-responsive">
                 <table className="table table-primary">
                   <thead>
@@ -400,7 +422,7 @@ function Users() {
                             </b>
                           )}
                         </td>
-                        <td>
+                        <td className="text-center">
                           <button
                             className="btn btn-danger btn-sm"
                             onClick={(e) => deleteUser(item.id)}
@@ -408,7 +430,7 @@ function Users() {
                             Xóa
                           </button>
                           <button
-                            className="ms-3 btn btn-warning btn-sm"
+                            className="btn btn-warning btn-sm"
                             onClick={(e) =>
                               editUser(
                                 item.id,
@@ -429,6 +451,10 @@ function Users() {
             </div>
           )}
         </div>
+        </div>
+          </div>
+        </div>
+        {/* Footer End */}
       </div>
     </>
   );

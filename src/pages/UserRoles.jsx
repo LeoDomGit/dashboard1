@@ -12,6 +12,7 @@ function UserRoles() {
   const [rolename, setUserRole] = useState("");
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
+  const [show3, setShow3] = useState(false);
   const Toast = Swal.mixin({
     toast: true,
     position: "top-end",
@@ -144,6 +145,13 @@ function UserRoles() {
       }
     });
   };
+  const setSideBar1 = () => {
+    if (show3 == false) {
+      setShow3(true);
+    } else {
+      setShow3(false);
+    }
+  };
   useEffect(()=>{
     axios({
         method: "get",
@@ -154,7 +162,7 @@ function UserRoles() {
   },[])
   return (
     <>
-      <Sidebar />
+      <Sidebar show={show3}/>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header>
           <Modal.Title
@@ -193,8 +201,10 @@ function UserRoles() {
           </Button>
         </Modal.Footer>
       </Modal>
-      <div classname="content">
-        <nav className="navbar navbar-expand sticky-top px-4 py-0 mt-3">
+      <div className={`content ${show3 ? "" : "open"} mt-3`}>
+        {/* Navbar Start */}
+        <nav style={{'paddingLeft':show3?'27%':'2%','transition':'ease-in-out .3s'}} className="navbar navbar-expand sticky-top px-4 py-0">
+        <button className='btn btn-success me-3'  onClick={(e) => setSideBar1()}><i class='bx bx-menu' ></i></button>
           <button className="btn btn-primary" onClick={(e) => setShow(true)}>
             Thêm
           </button>

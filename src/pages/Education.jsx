@@ -1,221 +1,230 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { Modal, Button } from "react-bootstrap";
 import Loader from "../components/Loading.jsx/Loader";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 function Education() {
-    const url = "https://api.trungthanhweb.com/api/";
-    const [loading, setLoading] = useState(false);
-    const [show, setShow] = useState(false);
-    const handleShow = () => setShow(true);
-    const handleClose = () => setShow(false);
-    const [edit, setEdit1] = useState(false);
-    const [edu, setEdu] = useState("");
-    const [education, setEucation] = useState([]);
-    const [idEdit, setIdEdit] = useState(0);
-    const [page, setPage] = useState(1);
-    const [pagination, setPagination] = useState([]);
-    const [lastpage,setLast]=useState(0);
-    const [lastpage1,setLast1]=useState(0);
-    const [pageSc, setPageSc] = useState(1);
-    const submitEditEdu = () => {
-        if (edu == "" || idEdit == 0) {
-          Toast.fire({
-            icon: "error",
-            title: "Thiếu ngành giáo dục",
-          });
-        } else {
-          axios({
-            method: "post",
-            url: url + "editEdu",
-            data: {
-              id: idEdit,
-              name: edu,
-            },
-          }).then((res) => {
-            if (res.data.check == true) {
-              Toast.fire({
-                icon: "success",
-                title: "Sửa thành công",
-              });
-              setEucation(res.data.edu);
-              setEdu("");
-              handleClose();
-            } else if (res.data.check == false) {
-              if (res.data.msg.name) {
-                Toast.fire({
-                  icon: "error",
-                  title: res.data.msg.name,
-                });
-              } else if (res.data.msg.id) {
-                Toast.fire({
-                  icon: "error",
-                  title: res.data.msg.id,
-                });
-              }
-            }
-          });
-        }
-      };
-    const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 1700,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.addEventListener("mouseenter", Swal.stopTimer);
-          toast.addEventListener("mouseleave", Swal.resumeTimer);
-        },
+  const url = "https://api.trungthanhweb.com/api/";
+  const [loading, setLoading] = useState(false);
+  const [show, setShow] = useState(false);
+  const handleShow = () => setShow(true);
+  const handleClose = () => setShow(false);
+  const [edit, setEdit1] = useState(false);
+  const [edu, setEdu] = useState("");
+  const [education, setEucation] = useState([]);
+  const [idEdit, setIdEdit] = useState(0);
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState([]);
+  const [lastpage, setLast] = useState(0);
+  const [lastpage1, setLast1] = useState(0);
+  const [pageSc, setPageSc] = useState(1);
+  const [show3, setShow3] = useState(false);
+
+  const submitEditEdu = () => {
+    if (edu == "" || idEdit == 0) {
+      Toast.fire({
+        icon: "error",
+        title: "Thiếu ngành giáo dục",
       });
-      const setEdit = (id, name) => {
-        setEdu(name);
-        setEdit1(true);
-        setIdEdit(id);
-        handleShow();
-      };
-      const switchEdu = (id) => {
-        Swal.fire({
-          icon: "question",
-          text: "Chuyển trạng thái của lĩnh vực ?",
-          showDenyButton: true,
-          showCancelButton: false,
-          confirmButtonText: "Đúng",
-          denyButtonText: `Không`,
-        }).then((result) => {
-          /* Read more about isConfirmed, isDenied below */
-          if (result.isConfirmed) {
-            axios({
-              method: "post",
-              url: url + "switchEdu",
-              data: {
-                id: id,
-              },
-            }).then((res) => {
-              setEucation(res.data.edu);
-              console.log(res);
-            });
-          } else if (result.isDenied) {
-          }
-        });
-      };
-      const submitEdu = () => {
-        if (edu == "") {
+    } else {
+      axios({
+        method: "post",
+        url: url + "editEdu",
+        data: {
+          id: idEdit,
+          name: edu,
+        },
+      }).then((res) => {
+        if (res.data.check == true) {
           Toast.fire({
-            icon: "error",
-            title: "Thiếu ngành giáo dục",
+            icon: "success",
+            title: "Sửa thành công",
           });
-        } else {
-          axios({
-            method: "post",
-            url: url + "createEdu",
-            data: {
-              name: edu,
-            },
-          }).then((res) => {
-            if (res.data.check == true) {
-              Toast.fire({
-                icon: "success",
-                title: "Thêm thành công",
-              })
-              console.log(res.data);
-              setEucation(res.data.edu);
-              setEdu("");
-              handleClose(); 
-            } else if (res.data.check == false) {
-              if (res.data.msg.edu) {
-                Toast.fire({
-                  icon: "error",
-                  title: res.data.msg.edu,
-                });
-              }
-            }
-          });
-        }
-      };
-      useEffect(() => {
-        axios({
-          method: "get",
-          url: url + "edu?page=" + page,
-        }).then((res) => {
-          setEucation(res.data.data);
-          var arr=[];
-          for (let i = 1; i < res.data.last_page + 1; i++) {
-            arr.push(i);
-            // setPagination((pagination) => [...pagination, i]);
-          }
-          setPagination(arr);
-          setLast(res.data.last_page);
-        });
-      }, [page]);
-      const deleteEdu = (id) => {
-        Swal.fire({
-          icon: "question",
-          text: "Xóa chương trình giáo dục?",
-          showDenyButton: true,
-          showCancelButton: false,
-          confirmButtonText: "Đúng",
-          denyButtonText: `Không`,
-        }).then((result) => {
-          /* Read more about isConfirmed, isDenied below */
-          if (result.isConfirmed) {
-            axios({
-              method: "post",
-              url: url + "deleteEdu",
-              data: {
-                id: id,
-              },
-            }).then((res) => {
-              if (res.data.check == true) {
-                Toast.fire({
-                  icon: "success",
-                  title: "Xóa thành công",
-                });
-                setEucation(res.data.edu);
-                setEdu("");
-                handleClose();
-              } else if (res.data.check == false) {
-                if (res.data.msg.name) {
-                  Toast.fire({
-                    icon: "error",
-                    title: res.data.msg.name,
-                  });
-                } else if (res.data.msg.id) {
-                  Toast.fire({
-                    icon: "error",
-                    title: res.data.msg.id,
-                  });
-                }
-              }
+          setEucation(res.data.edu);
+          setEdu("");
+          handleClose();
+        } else if (res.data.check == false) {
+          if (res.data.msg.name) {
+            Toast.fire({
+              icon: "error",
+              title: res.data.msg.name,
             });
-          } else if (result.isDenied) {
+          } else if (res.data.msg.id) {
+            Toast.fire({
+              icon: "error",
+              title: res.data.msg.id,
+            });
+          }
+        }
+      });
+    }
+  };
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 1700,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+  });
+  const setEdit = (id, name) => {
+    setEdu(name);
+    setEdit1(true);
+    setIdEdit(id);
+    handleShow();
+  };
+  const switchEdu = (id) => {
+    Swal.fire({
+      icon: "question",
+      text: "Chuyển trạng thái của lĩnh vực ?",
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: "Đúng",
+      denyButtonText: `Không`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        axios({
+          method: "post",
+          url: url + "switchEdu",
+          data: {
+            id: id,
+          },
+        }).then((res) => {
+          setEucation(res.data.edu);
+          console.log(res);
+        });
+      } else if (result.isDenied) {
+      }
+    });
+  };
+  const submitEdu = () => {
+    if (edu == "") {
+      Toast.fire({
+        icon: "error",
+        title: "Thiếu ngành giáo dục",
+      });
+    } else {
+      axios({
+        method: "post",
+        url: url + "createEdu",
+        data: {
+          name: edu,
+        },
+      }).then((res) => {
+        if (res.data.check == true) {
+          Toast.fire({
+            icon: "success",
+            title: "Thêm thành công",
+          });
+          console.log(res.data);
+          setEucation(res.data.edu);
+          setEdu("");
+          handleClose();
+        } else if (res.data.check == false) {
+          if (res.data.msg.edu) {
+            Toast.fire({
+              icon: "error",
+              title: res.data.msg.edu,
+            });
+          }
+        }
+      });
+    }
+  };
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: url + "edu?page=" + page,
+    }).then((res) => {
+      setEucation(res.data.data);
+      var arr = [];
+      for (let i = 1; i < res.data.last_page + 1; i++) {
+        arr.push(i);
+        // setPagination((pagination) => [...pagination, i]);
+      }
+      setPagination(arr);
+      setLast(res.data.last_page);
+    });
+  }, [page]);
+  const deleteEdu = (id) => {
+    Swal.fire({
+      icon: "question",
+      text: "Xóa chương trình giáo dục?",
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: "Đúng",
+      denyButtonText: `Không`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        axios({
+          method: "post",
+          url: url + "deleteEdu",
+          data: {
+            id: id,
+          },
+        }).then((res) => {
+          if (res.data.check == true) {
+            Toast.fire({
+              icon: "success",
+              title: "Xóa thành công",
+            });
+            setEucation(res.data.edu);
+            setEdu("");
+            handleClose();
+          } else if (res.data.check == false) {
+            if (res.data.msg.name) {
+              Toast.fire({
+                icon: "error",
+                title: res.data.msg.name,
+              });
+            } else if (res.data.msg.id) {
+              Toast.fire({
+                icon: "error",
+                title: res.data.msg.id,
+              });
+            }
           }
         });
-      };
-      const setPageF= (i)=>{
-        if(i<1){
-          setPage(1);
-        }else if(i>lastpage){
-          setPage(lastpage);
-        }else{
-          setPage(i);
-        }
+      } else if (result.isDenied) {
       }
-        const setPageF1= (i)=>{
-        if(i<1){
-          setPageSc(1);
-        }else if(i>lastpage1){
-          setPageSc(lastpage1);
-        }else{
-          setPageSc(i);
-        }
-      }
+    });
+  };
+  const setPageF = (i) => {
+    if (i < 1) {
+      setPage(1);
+    } else if (i > lastpage) {
+      setPage(lastpage);
+    } else {
+      setPage(i);
+    }
+  };
+  const setPageF1 = (i) => {
+    if (i < 1) {
+      setPageSc(1);
+    } else if (i > lastpage1) {
+      setPageSc(lastpage1);
+    } else {
+      setPageSc(i);
+    }
+  };
+  const setSideBar1 = () => {
+    if (show3 == false) {
+      setShow3(true);
+    } else {
+      setShow3(false);
+    }
+  };
   return (
     <>
-    <Sidebar />
-    <Modal show={show} onHide={handleClose}>
+      <Sidebar show={show3} />
+      <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Loại hình giáo dục</Modal.Title>
         </Modal.Header>
@@ -244,16 +253,25 @@ function Education() {
           )}
         </Modal.Footer>
       </Modal>
-      <div classname="content">
+      <div classname={`content ${show3 ? "" : "open"} mt-3`}>
         {loading && <Loader />}
-        <nav className="navbar navbar-expand sticky-top px-4 py-0 mt-3">
+        <nav
+         style={{'paddingLeft':show3?'27%':'2%','transition':'ease-in-out .3s'}} className="navbar navbar-expand sticky-top pt-3 px-4 py-0"
+        >
+          <button
+            className="btn btn-success me-3"
+            onClick={(e) => setSideBar1()}
+          >
+            <i class="bx bx-menu"></i>
+          </button>
           <button className="btn btn-primary" onClick={(e) => setShow(true)}>
             Thêm
           </button>
         </nav>
+        <div className="container-fluid">
         <div className="row mt-3">
           {education && education.length > 0 && (
-            <div className="col-md-10 ms-3">
+            <div className="col-md ms-3">
               <div className="table-responsive">
                 <table className="table table-primary">
                   <thead>
@@ -272,7 +290,7 @@ function Education() {
                         <td>
                           <Link
                             style={{ textDecoration: "none" }}
-                            to={`/cate/${item.id}`}
+                            to={`/education/${item.id}`}
                           >
                             {item.name}
                           </Link>
@@ -293,7 +311,7 @@ function Education() {
                             Sửa
                           </button>
                           <button
-                            className="btn btn-danger ms-3 btn-sm"
+                            className="btn btn-danger btn-sm"
                             onClick={(e) => deleteEdu(item.id)}
                           >
                             Xóa
@@ -309,25 +327,41 @@ function Education() {
                       <nav aria-label="...">
                         <ul className="pagination">
                           <li className={`page-item`}>
-                            <a className="page-link" onClick={(e)=>setPageF(page-1)}>Previous</a>
+                            <a
+                              className="page-link"
+                              onClick={(e) => setPageF(page - 1)}
+                            >
+                              Previous
+                            </a>
                           </li>
-                          {pagination.map((item,index) => (
+                          {pagination.map((item, index) => (
                             <li key={index} className="page-item">
-                              {item==page ?
-                              <a className="page-link active" onClick={(e)=>setPage(item)} href="#">
-                              {item}
-                            </a>
-                              :
-                              <a className="page-link" onClick={(e)=>setPage(item)} href="#">
-                              {item}
-                            </a>
-                              }
-                              
+                              {item == page ? (
+                                <a
+                                  className="page-link active"
+                                  onClick={(e) => setPage(item)}
+                                  href="#"
+                                >
+                                  {item}
+                                </a>
+                              ) : (
+                                <a
+                                  className="page-link"
+                                  onClick={(e) => setPage(item)}
+                                  href="#"
+                                >
+                                  {item}
+                                </a>
+                              )}
                             </li>
                           ))}
 
                           <li className="page-item">
-                            <a className="page-link" onClick={(e)=>setPageF(page+1)} href="#">
+                            <a
+                              className="page-link"
+                              onClick={(e) => setPageF(page + 1)}
+                              href="#"
+                            >
                               Next
                             </a>
                           </li>
@@ -340,9 +374,11 @@ function Education() {
             </div>
           )}
         </div>
-    </div>
+      </div>
+
+      </div>
     </>
-  )
+  );
 }
 
-export default Education
+export default Education;

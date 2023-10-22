@@ -80,7 +80,7 @@
 }
 
 .content {
-    margin-left: 250px;
+    margin-left: 4%;
     min-height: 100vh;
     background: #FFFFFF;
     transition: 0.5s;
@@ -96,12 +96,12 @@
     }
 
     .content {
-        width: calc(100% - 250px);
+        width: 100%;
     }
 
     .content.open {
         width: 100%;
-        margin-left: 0;
+        margin-left: 0px;
     }
 }
 

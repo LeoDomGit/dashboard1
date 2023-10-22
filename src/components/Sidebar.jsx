@@ -1,12 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-function Sidebar() {
+function Sidebar(props) {
   return (
     <>
-   <div className="sidebar pe-4 pb-3">
+   <div className={`sidebar pe-4 pb-3 ${props.show==true?'open':''}`}>
   <nav className="navbar bg-light navbar-light">
-    <a href="index-2.html" className="navbar-brand mx-4 mb-3">
+    <a href="#" className="navbar-brand mx-4 mb-3">
       <h3 className="text-primary">
         <i className="fa fa-hashtag me-2" />
         DASHBOARD
@@ -16,7 +16,7 @@ function Sidebar() {
       <div className="position-relative">
         <img
           className="rounded-circle"
-          src="img/user.jpg"
+          src="/img/user.jpg"
           alt=""
           style={{ width: 40, height: 40 }}
         />
@@ -37,7 +37,7 @@ function Sidebar() {
         Tài khoản
       </Link>
       <Link to={"/education"} className="nav-item nav-link">
-        <i className="fa fa-keyboard me-2" />
+      <i class='bx bxl-meta me-2'></i>
         Loại hình giáo dục
       </Link>
       <a href="table.html" className="nav-item nav-link">

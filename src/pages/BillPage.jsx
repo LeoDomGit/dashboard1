@@ -169,7 +169,9 @@ function BillPage() {
             Toast.fire({
               icon: "success",
               title: "Đã đăng ký học viên",
-            });
+            }).then(()=>{
+              window.location.reload();
+            })
           }
         })
         .catch(function (error) {

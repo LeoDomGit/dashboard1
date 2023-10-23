@@ -58,6 +58,10 @@ function Sidebar(props) {
       <i className='bx bxs-calendar'></i>
         Lịch giảng dạy
       </Link>
+      <Link to={"/bills"} style={{'fontSize':'17px'}} className="nav-item nav-link">
+      <i className='bx bx-cylinder'></i>
+        Hoá đơn
+      </Link>
       <a href="#" onClick={(e)=>logout()} className="nav-item nav-link">
         <i className='bx bx-log-out me-2'></i>
         Log out

@@ -11,6 +11,7 @@ import BillPage from "./pages/BillPage";
 import Schedules from "./pages/Schedules";
 import SingleCourse from "./pages/SingleCourse";
 import Login from "./pages/Login";
+import Calendar from "./pages/Calendar";
 function App() {
   return (
     <div className="container-xxl position-relative p-0">
@@ -26,6 +27,7 @@ function App() {
           <Route path="/single/:id" element={<SingleCourse/>}/>
           {/*  */}
           <Route path="/bills" element={<BillPage />} />
+          <Route path="/calendar" element={<Calendar />} />
           {/*  */}
           <Route path="/schedules" element={<Schedules />} />
         </Routes>

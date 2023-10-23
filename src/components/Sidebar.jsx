@@ -54,6 +54,10 @@ function Sidebar(props) {
       <i className='bx bxl-meta me-2'></i>
         Loại hình giáo dục
       </Link>
+      <Link to={"/calendar"} style={{'fontSize':'17px'}} className="nav-item nav-link">
+      <i className='bx bxs-calendar'></i>
+        Lịch giảng dạy
+      </Link>
       <a href="#" onClick={(e)=>logout()} className="nav-item nav-link">
         <i className='bx bx-log-out me-2'></i>
         Log out

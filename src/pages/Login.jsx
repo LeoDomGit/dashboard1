@@ -43,8 +43,8 @@ function Login() {
             icon: "success",
             title: "Đăng nhập thành công",
           }).then(() => {
-            localStorage.setItem("token", res.data.token);
-            window.location.replace("/edu");
+            localStorage.setItem('email',email);
+            window.location.replace("/education");
           });
         } else if (res.data.check == false) {
           if (res.data.msg.email) {

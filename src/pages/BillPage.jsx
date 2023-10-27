@@ -27,6 +27,8 @@ function BillPage() {
   const [studentPhone, setstudentPhone] = useState("");
   const [availableClass, setClass1] = useState([]);
   const [idSchedulechoose, setChooseSchedule] = useState(0);
+  const [page, setPage] = useState(1);
+  const [pageList, setPageList] = useState([]);
   const Toast = Swal.mixin({
     toast: true,
     position: "top-end",
@@ -169,9 +171,16 @@ function BillPage() {
             Toast.fire({
               icon: "success",
               title: "Đã đăng ký học viên",
-            }).then(()=>{
+            }).then(() => {
               window.location.reload();
-            })
+            });
+          }else if(res.check==false){
+            if(res.msg){
+              Toast.fire({
+                icon: "error",
+                title: res.msg,
+              })
+            }
           }
         })
         .catch(function (error) {
@@ -182,10 +191,10 @@ function BillPage() {
   useEffect(() => {
     var arr = [];
 
-    fetch(url + "getBills")
+    fetch(url + "getBills?page=" + page)
       .then((res) => res.json())
       .then((res) => {
-        res.forEach((el) => {
+        res.data.forEach((el) => {
           var item = {};
           item.name = el.courseName;
           item.status = el.status;
@@ -194,6 +203,14 @@ function BillPage() {
           item.schedule = JSON.parse(el.schedule)[0].time;
           arr.push(item);
         });
+        var max = res.last_page;
+        var i = 1;
+        var arr1 = [];
+        while (i <= max) {
+          arr1.push(i);
+          i++;
+        }
+        setPageList(arr1);
         setBill(arr);
       });
     fetch("https://api.trungthanhweb.com/api/getTeacherList")
@@ -212,16 +229,20 @@ function BillPage() {
         });
         setScheduleList(arr);
       });
-  }, []);
+  }, [page]);
   return (
     <>
       <Sidebar show={show3} />
       <div className={`content ${show3 ? "" : "open"} mt-3`}>
         {loading && <Loader />}
         <nav
-         style={{'paddingLeft':show3?'27%':'2%','transition':'ease-in-out .3s'}} className="navbar navbar-expand sticky-top pt-3 px-4 py-0"
+          style={{
+            paddingLeft: show3 ? "27%" : "2%",
+            transition: "ease-in-out .3s",
+          }}
+          className="navbar navbar-expand sticky-top pt-3 px-4 py-0"
         >
-            <button
+          <button
             href="#"
             className="btn btn-primary"
             onClick={(e) => handleShow()}
@@ -391,19 +412,32 @@ function BillPage() {
                         {item.status == 0 ? <b>Đã đặt</b> : <b>Đã xếp lớp</b>}
                       </td>
                       <td>
-                        {item.status==0 &&
-                        <button
-                        className="btn btn-warning"
-                        onClick={(e) => setUpChooseClass(item.student)}
-                      >
-                        Sắp lớp
-                      </button>
-                        }
+                        {item.status == 0 && (
+                          <button
+                            className="btn btn-warning"
+                            onClick={(e) => setUpChooseClass(item.student)}
+                          >
+                            Sắp lớp
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))}
               </tbody>
             </table>
+          </div>
+          <div className="mt-2">
+            <nav aria-label="...">
+              <ul className="pagination" >
+                {pageList.length>0 && pageList.map((item,index)=>(
+                <li style={{'listStyle':'none'}} key={index} className="page-item me-2" onClick={(e)=>setPage(item)}>
+                <a className={item==page ? "page-link active":'page-link'} href="#">
+                  {item}
+                </a>
+              </li>
+                ))}
+              </ul>
+            </nav>
           </div>
         </div>
       </div>

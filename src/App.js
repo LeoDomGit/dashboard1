@@ -12,6 +12,8 @@ import Schedules from "./pages/Schedules";
 import SingleCourse from "./pages/SingleCourse";
 import Login from "./pages/Login";
 import Calendar from "./pages/Calendar";
+import ClassPage from "./pages/ClassPage";
+import NotFound from "./pages/NotFound";
 function App() {
   return (
     <div className="container-xxl position-relative p-0">
@@ -28,8 +30,11 @@ function App() {
           {/*  */}
           <Route path="/bills" element={<BillPage />} />
           <Route path="/calendar" element={<Calendar />} />
+          <Route path="/runningclass" element={<ClassPage />} />
+          
           {/*  */}
           <Route path="/schedules" element={<Schedules />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </div>

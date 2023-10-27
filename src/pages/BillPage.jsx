@@ -174,11 +174,13 @@ function BillPage() {
             }).then(() => {
               window.location.reload();
             });
-          }else if(res.check==false){
-            if(res.msg){
+          }else if(res.data.check==false){
+            if(res.data.msg){
               Toast.fire({
                 icon: "error",
-                title: res.msg,
+                title: res.data.msg,
+              }).then(()=>{
+                window.location.reload();
               })
             }
           }

@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Loader from "../components/Loading.jsx/Loader";
 import Modal from 'react-bootstrap/Modal';
+import Swal from "sweetalert2";
+import axios from "axios";
+
 function ClassPage() {
     const url = "https://api.trungthanhweb.com/api/";
     const [show3, setShow3] = useState(false);
@@ -14,6 +17,17 @@ function ClassPage() {
     const [studentList,setStudent] = useState([]);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 1500,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener("mouseenter", Swal.stopTimer);
+        toast.addEventListener("mouseleave", Swal.resumeTimer);
+      },
+    });
     const handleClose1=()=>{
       setStudent([]);
       setShow(false)
@@ -26,6 +40,50 @@ function ClassPage() {
         });
         setStudent(arr);
         handleShow();
+      })
+    }
+    const deleteClass =(id)=>{
+      Swal.fire({
+        icon:'question',
+        text: 'Xoá lớp học?',
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: 'Đúng',
+        denyButtonText: `Không`,
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          axios({
+            method: 'post',
+            url: url+'deleteProccess',
+            data: {
+              id: id,
+            }
+          })
+          .then(function (res) {
+            if(res.data.check==true){
+              Toast.fire({
+                icon: 'success',
+                title: 'Đã xoá thành công'
+              }).then(()=>{
+                window.location.reload();
+              })
+            }else if(res.data.check==false){
+              if(res.data.msg.id){
+                Toast.fire({
+                  icon: 'error',
+                  title: res.data.msg.id
+                })
+              }else if(res.data.msg){
+                Toast.fire({
+                  icon: 'error',
+                  title: res.data.msg
+                })
+              }
+            }
+          })
+        } else if (result.isDenied) {
+        }
       })
     }
     useEffect(()=>{
@@ -68,6 +126,8 @@ function ClassPage() {
               <th scope="col">Lịch giảng</th>
               <th scope="col">Giáo viên</th>
               <th scope="col">Số lượng học viên</th>
+              <th scope="col">Xoá </th>
+
             </tr>
           </thead>
           <tbody>
@@ -79,8 +139,9 @@ function ClassPage() {
                   </td>
                   <td>{ỉtem.schedules}</td>
                   <td>{ỉtem.teacher}</td>
-                  <td>{ỉtem.count}
+                  <td className="">{ỉtem.count}
                   </td>
+                  <td><button className="btn btn-danger" onClick={(e)=>deleteClass(ỉtem.id)}>Xoá</button></td>
                 </tr>
               ))}
           </tbody>

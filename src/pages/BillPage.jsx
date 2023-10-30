@@ -352,7 +352,7 @@ function BillPage() {
                 {scheduleList.length > 0 &&
                   scheduleList.map((item, index) => (
                     <option key={index} value={[item.schedule, item.id]}>
-                      {item.schedule}
+                     {item.name} - {item.schedule}
                     </option>
                   ))}
               </select>

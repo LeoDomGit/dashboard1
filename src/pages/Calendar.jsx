@@ -117,7 +117,9 @@ function Calendar() {
               Toast.fire({
                 icon: "success",
                 title: "Đã huỷ lịch dạy",
-              });
+              }).then(()=>{
+                window.location.reload()
+              })
             } else if (res.check == false) {
               if (res.msg.id) {
                 Toast.fire({

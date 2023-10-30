@@ -189,6 +189,11 @@ function Education() {
                 icon: "error",
                 title: res.data.msg.id,
               });
+            }else if(res.data.msg){
+              Toast.fire({
+                icon: "error",
+                title: res.data.msg,
+              });
             }
           }
         });
